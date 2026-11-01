@@ -18,3 +18,11 @@ https://raw.githubusercontent.com/ayaannm2007/FreeSports-IPTV/main/FreeSports.m3
 Combat/MMA, US Sports, Poker, beIN XTRA.
 
 _Source links aggregated from public free-to-air streams (iptv-org)._
+
+## World playlist (all countries)
+Every country's channels, grouped by country (~12,920 channels, 189 countries):
+
+```
+https://raw.githubusercontent.com/ayaannm2007/FreeSports-IPTV/main/World.m3u
+```
+_Source: iptv-org public index._
