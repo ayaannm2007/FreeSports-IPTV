@@ -1,0 +1,43 @@
+name: Update playlists
+
+on:
+  schedule:
+    - cron: "0 */6 * * *"   # every 6 hours (UTC)
+  workflow_dispatch:         # manual "Run workflow" button
+
+permissions:
+  contents: write
+
+concurrency:
+  group: update-playlists
+  cancel-in-progress: false
+
+jobs:
+  update:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Build FreeSports.m3u (prune dead, add new)
+        run: python scripts/build_freesports.py
+
+      - name: Refresh World.m3u
+        run: python scripts/build_world.py
+
+      - name: Commit & push if changed
+        run: |
+          git config user.name  "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add FreeSports.m3u World.m3u
+          if git diff --cached --quiet; then
+            echo "No changes to commit."
+          else
+            git commit -m "Auto-update playlists ($(date -u '+%Y-%m-%d %H:%M')Z)"
+            git push
+          fi

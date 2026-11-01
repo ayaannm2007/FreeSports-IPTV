@@ -1,9 +1,8 @@
 #EXTM3U
-# ===========================================================
-# World IPTV - all countries (grouped by country)
-# Source: iptv-org public index (free-to-air / publicly listed streams)
-# Channels: ~12,920 | Countries: 189 | Updated: 2026-11-01
-# ===========================================================
+# ---------------------------------------------------------
+# World Live TV  -  all countries  (auto-updated)
+# Source: iptv-org public index (country-grouped).
+# ---------------------------------------------------------
 #EXTINF:-1 tvg-id="4Afghanistan.fr@SD" tvg-logo="" group-title="Afghanistan",4 Afghanistan
 https://4afghls.persiana.live/hls/stream.m3u8
 #EXTINF:-1 tvg-id="ABNAfghanistan.us@SD" tvg-logo="https://i.imgur.com/LI30mAt.png" group-title="Afghanistan",ABN Afghanistan (540p)
