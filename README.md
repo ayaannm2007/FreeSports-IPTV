@@ -10,7 +10,7 @@ World Poker Tour and more. No premium/paid channels.
 Add this raw URL to any IPTV player (OTT Navigator, TiviMate, IPTV Smarters, VLC):
 
 ```
-https://raw.githubusercontent.com/<USERNAME>/<REPO>/main/FreeSports.m3u
+https://raw.githubusercontent.com/ayaannm2007/FreeSports-IPTV/main/FreeSports.m3u
 ```
 
 ## Channels
