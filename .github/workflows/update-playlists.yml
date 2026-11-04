@@ -27,17 +27,14 @@ jobs:
       - name: Build FreeSports.m3u (prune dead, add new)
         run: python scripts/build_freesports.py
 
-      - name: Refresh World.m3u
-        run: python scripts/build_world.py
-
       - name: Commit & push if changed
         run: |
           git config user.name  "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add FreeSports.m3u World.m3u
+          git add FreeSports.m3u
           if git diff --cached --quiet; then
             echo "No changes to commit."
           else
-            git commit -m "Auto-update playlists ($(date -u '+%Y-%m-%d %H:%M')Z)"
+            git commit -m "Auto-update FreeSports ($(date -u '+%Y-%m-%d %H:%M')Z)"
             git push
           fi
