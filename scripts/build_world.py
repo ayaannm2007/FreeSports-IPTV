@@ -77,12 +77,37 @@ def parse(text: str):
 
 
 def is_dead(url: str) -> bool:
-    """True only when the stream is definitively gone."""
+    """True only when the stream is definitively gone.
+
+    Dead  = host gone / DNS fail / 404-410-451, OR a 200 reply that is not
+            a real manifest but an HTML / parked / empty error page.
+    Keep  = 403 geo-blocks, timeouts, redirects, and real m3u8/MPD bodies.
+    """
     try:
         req = urllib.request.Request(
-            url, headers={"User-Agent": UA, "Range": "bytes=0-2047"})
+            url, headers={"User-Agent": UA, "Range": "bytes=0-4095"})
         with urllib.request.urlopen(req, timeout=10) as r:
-            return r.status in DEAD_CODES
+            if r.status in DEAD_CODES:
+                return True
+            if r.status not in (200, 206):
+                return False
+            ctype = (r.headers.get("Content-Type") or "").lower()
+            head = r.read(4096)
+            low = head.lower()
+            # real stream manifest -> alive
+            if (b"#extm3u" in low or b"#extinf" in low
+                    or b"<mpd" in low or b"dash:" in low):
+                return False
+            # a 200 that hands back an HTML / error / parked page -> dead
+            stripped = low.lstrip()
+            if ("html" in ctype or stripped.startswith(b"<!doctype")
+                    or stripped.startswith(b"<html")
+                    or b"<title>404" in low or b"not found" in low
+                    or b"access denied" in low or b"page cannot be found" in low):
+                return True
+            if len(head.strip()) == 0:          # empty 200 body
+                return True
+            return False                        # unknown binary stream -> keep
     except urllib.error.HTTPError as e:
         return e.code in DEAD_CODES          # 403/401/5xx -> keep
     except urllib.error.URLError as e:
